@@ -2,26 +2,20 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Maze Runner Game - Web</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Maze Runner Game</title>
     <style>
         body {
             margin: 0;
+            overflow: hidden;
             background: black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
         }
         canvas {
-            background: #111; /* visible canvas */
-            border: 2px solid #00ffea;
+            display: block;
         }
     </style>
 </head>
 <body>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
-
+    <canvas id="gameCanvas"></canvas>
     <script src="script.js"></script>
 </body>
 </html>
