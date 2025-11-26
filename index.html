@@ -1,21 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Maze Runner Game v2</title>
-
-    <!-- Make canvas fullscreen -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maze Runner Game V2</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    overflow: hidden;
+  }
+  #gameCanvas {
+    display: block;
+  }
+</style>
 </head>
 <body>
+<canvas id="gameCanvas"></canvas>
 
-    <!-- Canvas -->
-    <canvas id="gameCanvas"></canvas>
+<script>
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
 
-    <!-- JS -->
-    <script src="script.js"></script>
-</body>
-</html>
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+// ============================
+// IMAGE LOADING
+// ============================
+const images = {};
+let loadCount = 0;
+const TOTAL_IMAGES = 3;
+
+function loadImage(key, path) {
+  images[key] = new Image();
+  images[key].src = path;
+
+  images[key].onload = () => {
+    console.log(key + " loaded ✅");
+    loadCount++;
+    if(loadCount === TOTAL_IMAGES){
+      startGame();
+    }
+  };
+  
+  images[key].onerror = () => {
+    console.error("❌ FAILED loading:", path);
+  };
+}
+
+// Make sure paths match your folder
+loadImage("player", "girl.png");
+loadImage("enemy", "boy.png");
+loadImage("hod", "hod.png");
+
+// ============================
+// GAME OBJECTS
+// ============================
+const player = { x: 100, y: 100, size: 50, speed: 5 };
+const enemy = { x: 300, y: 100, size: 50 };
+const hod = { x: 500, y: 200, size: 50 };
+
+// ============================
+// GAME LOOP
+// ============================
+function startGame() {
+  console.log("All images loaded. Starting game...");
+  requestAnimationFrame(gameLoop);
+}
+
+function gameLoop() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  draw(player, images.player);
+  draw(enemy, images.enemy);
+  draw(hod, images.hod);
+
+  requestAnimationFrame(gameLoop);
+}
+
+// ============================
+// DRAW FUNCTION
+// ============================
+function draw(obj, img) {
+  if(img.complete && img.naturalWidth !== 0){
+    ctx.drawImage(img, obj.x, obj.y, obj.size, obj.size);
